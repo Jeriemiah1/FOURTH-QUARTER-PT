@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Quiz Website</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="quiz-container">
+    <h1>Simple Quiz Website</h1>
+
+    <button class="dark-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
+    <p id="timer">Time Left: 10</p>
+    <p id="question"></p>
+
+    <div class="choices">
+      <button id="A" onclick="checkAnswer('A')"></button>
+      <button id="B" onclick="checkAnswer('B')"></button>
+      <button id="C" onclick="checkAnswer('C')"></button>
+    </div>
+
+    <p id="result"></p>
+    <p id="score">Score: 0</p>
+
+    <button onclick="nextQuestion()">Next</button>
+    <button onclick="resetQuiz()">Reset Quiz</button>
+
+    <hr>
+
+    <h2>🏆 Leaderboard</h2>
+    <ul id="leaderboard"></ul>
+    <button onclick="clearLeaderboard()">Clear Leaderboard</button>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
