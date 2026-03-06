@@ -39,7 +39,7 @@ const quiz = [
 ];
 
 
-// Keeps track of the current question index
+// Keeps track of the current question
 let index = 0;
 
 // Stores the player's score
@@ -48,74 +48,64 @@ let score = 0;
 // Starting time for each question
 let timeLeft = 10;
 
-// Variable to control the timer
+// Timer controller
 let timer;
 
 
 // Function to start the countdown timer
 function startTimer() {
 
-  clearInterval(timer); // Stops any previous timer
-  timeLeft = 10; // Reset timer
+  clearInterval(timer); // Stop previous timer
+  timeLeft = 10;
 
-  // Display the time on the webpage
   document.getElementById("timer").innerText = "Time Left: " + timeLeft;
 
   enableButtons(); // Enable answer buttons
 
-  // Runs every 1 second
   timer = setInterval(() => {
 
-    timeLeft--; // Decrease time
+    timeLeft--;
 
-    // Update timer display
     document.getElementById("timer").innerText = "Time Left: " + timeLeft;
 
-    // If time reaches zero
     if (timeLeft === 0) {
 
-      clearInterval(timer); // Stop timer
+      clearInterval(timer);
 
       document.getElementById("result").innerText = "Time's up!";
 
-      disableButtons(); // Prevent answering
+      disableButtons();
     }
 
   }, 1000);
 }
 
 
-// Loads the current question and choices on the page
+// Loads the current question and answer choices
 function loadQuestion() {
 
-  // Display question
   document.getElementById("question").innerText = quiz[index].question;
 
-  // Display choices
   document.getElementById("A").innerText = quiz[index].choices.A;
   document.getElementById("B").innerText = quiz[index].choices.B;
   document.getElementById("C").innerText = quiz[index].choices.C;
 
-  // Clear previous result text
   document.getElementById("result").innerText = "";
 
-  // Start timer for the question
   startTimer();
 }
 
 
-// Function to check if selected answer is correct
+// Checks if the selected answer is correct
 function checkAnswer(choice) {
 
-  clearInterval(timer); // Stop timer after answering
-  disableButtons(); // Prevent clicking multiple times
+  clearInterval(timer);
+  disableButtons();
 
-  // Compare selected answer with correct answer
   if (choice === quiz[index].answer) {
 
-    score++; // Increase score
+    score++;
 
-    // Update score display
     document.getElementById("score").innerText = "Score: " + score;
 
     document.getElementById("result").innerText = "Correct!";
@@ -128,36 +118,36 @@ function checkAnswer(choice) {
 }
 
 
-// Function to move to the next question
+// Moves to the next question
 function nextQuestion() {
 
-  index++; // Move to next question
+  index++;
 
   if (index < quiz.length) {
 
-    loadQuestion(); // Load next question
+    loadQuestion();
 
   } else {
 
-    clearInterval(timer); // Stop timer
+    clearInterval(timer);
 
-    // Display final score
+    // Ask for player's name
     let playerName = prompt("Enter your name:");
 
-    alert("Quiz Finished " + playerName + "!
-          Your Score: " + score);
+    // Display final score
+    alert("Quiz Finished " + playerName + "!\nYour Score: " + score);
   }
 }
 
 
-// Function to restart the quiz
+// Restarts the quiz
 function resetQuiz() {
 
-  location.reload(); // Reloads the webpage
+  location.reload();
 }
 
 
-// Disables answer buttons
+// Disable answer buttons
 function disableButtons() {
 
   document.getElementById("A").disabled = true;
@@ -167,7 +157,7 @@ function disableButtons() {
 }
 
 
-// Enables answer buttons
+// Enable answer buttons
 function enableButtons() {
 
   document.getElementById("A").disabled = false;
@@ -177,7 +167,7 @@ function enableButtons() {
 }
 
 
-// Toggles dark mode
+// Toggle dark mode
 function toggleDarkMode() {
 
   document.body.classList.toggle("dark");
@@ -185,6 +175,5 @@ function toggleDarkMode() {
 }
 
 
-// Automatically loads the first question when the page opens
-
+// Load the first question when the page opens
 loadQuestion();
