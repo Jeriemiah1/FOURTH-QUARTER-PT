@@ -2,12 +2,13 @@
 // Application Name: Simple Quiz Website
 // Author: Jeriemiah Huelma
 // Description: An interactive quiz web application
-// with timer, score tracking, dark mode, and reset.
+// with timer, score tracking, dark mode,
+// reset button, and leaderboard.
 // Created using HTML, CSS, and JavaScript.
 // ========================================
 
 
-// Array containing quiz questions, answer choices, and correct answers
+// Quiz questions, choices, and answers
 const quiz = [
   {
     question: "What does HTML stand for?",
@@ -39,28 +40,30 @@ const quiz = [
 ];
 
 
-// Keeps track of the current question
+// Track current question
 let index = 0;
 
-// Stores the player's score
+// Player score
 let score = 0;
 
-// Starting time for each question
+// Timer value
 let timeLeft = 10;
 
 // Timer controller
 let timer;
 
 
-// Function to start the countdown timer
+
+// Start the countdown timer
 function startTimer() {
 
-  clearInterval(timer); // Stop previous timer
+  clearInterval(timer);
+
   timeLeft = 10;
 
   document.getElementById("timer").innerText = "Time Left: " + timeLeft;
 
-  enableButtons(); // Enable answer buttons
+  enableButtons();
 
   timer = setInterval(() => {
 
@@ -81,7 +84,8 @@ function startTimer() {
 }
 
 
-// Loads the current question and answer choices
+
+// Load question and answer choices
 function loadQuestion() {
 
   document.getElementById("question").innerText = quiz[index].question;
@@ -96,10 +100,12 @@ function loadQuestion() {
 }
 
 
-// Checks if the selected answer is correct
+
+// Check if answer is correct
 function checkAnswer(choice) {
 
   clearInterval(timer);
+
   disableButtons();
 
   if (choice === quiz[index].answer) {
@@ -118,7 +124,8 @@ function checkAnswer(choice) {
 }
 
 
-// Moves to the next question
+
+// Move to next question
 function nextQuestion() {
 
   index++;
@@ -131,20 +138,27 @@ function nextQuestion() {
 
     clearInterval(timer);
 
-    // Ask for player's name
+    // Ask player name
     let playerName = prompt("Enter your name:");
 
-    // Display final score
+    // Save score
+    saveScore(playerName, score);
+
+    // Update leaderboard
+    showLeaderboard();
+
     alert("Quiz Finished " + playerName + "!\nYour Score: " + score);
   }
 }
 
 
-// Restarts the quiz
+
+// Restart the quiz
 function resetQuiz() {
 
   location.reload();
 }
+
 
 
 // Disable answer buttons
@@ -157,6 +171,7 @@ function disableButtons() {
 }
 
 
+
 // Enable answer buttons
 function enableButtons() {
 
@@ -167,6 +182,7 @@ function enableButtons() {
 }
 
 
+
 // Toggle dark mode
 function toggleDarkMode() {
 
@@ -175,5 +191,59 @@ function toggleDarkMode() {
 }
 
 
-// Load the first question when the page opens
+
+// Save player score to leaderboard
+function saveScore(playerName, score) {
+
+  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+  leaderboard.push({ name: playerName, score: score });
+
+  // Sort highest score first
+  leaderboard.sort((a, b) => b.score - a.score);
+
+  // Keep top 5 players
+  leaderboard = leaderboard.slice(0, 5);
+
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+}
+
+
+
+// Display leaderboard
+function showLeaderboard() {
+
+  const leaderboardList = document.getElementById("leaderboard");
+
+  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+  leaderboardList.innerHTML = "";
+
+  leaderboard.forEach((player, index) => {
+
+    const li = document.createElement("li");
+
+    li.textContent = `${index + 1}. ${player.name} - ${player.score}`;
+
+    leaderboardList.appendChild(li);
+
+  });
+}
+
+
+
+// Clear leaderboard
+function clearLeaderboard() {
+
+  localStorage.removeItem("leaderboard");
+
+  showLeaderboard();
+}
+
+
+
+// Load first question when page opens
 loadQuestion();
+
+// Display leaderboard when page loads
+showLeaderboard();
